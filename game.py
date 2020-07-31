@@ -96,87 +96,86 @@ class Checks:
         
     #Applaying the rules of the game regarding the value of x, y and counted 0s or 1s    
     def rulesofthegame(self, valueofxyd, cnt0, cnt1):
-        #print("Print value of xy is:", valueofxy, " no more; Count0, cnt1: ",cnt0 , cnt1)
+        #print("Print value of xy is:", valueofxy, "; Count0, cnt1: ",cnt0 , cnt1)
         if valueofxyd == 1:
             if cnt1 == (0 or 1 or 4 or 5 or 7 or 8):
                 dataofxy = int(0)
                 return int(dataofxy)
-            elif cnt1 == (2 or 3 or 6):
+            else:
                 dataofxy = 1
                 return int(dataofxy)        
         else:
-            if cnt1 == (3 or 6):
+            if cnt1 == (0 or 1 or 2 or 4 or 5 or 7 or 8):
                 dataofxy = 1
                 return int(dataofxy)
-            elif cnt1 == (0 or 1 or 2 or 4 or 5 or 7 or 8):
+            else:
                 dataofxy = int(0)
                 return int(dataofxy)        
             
             
     #First testing if there is a change of the value if not it keeps it as it is else change it
-    def changeofthevalue(self, changedvalue, valueofxy, arrayname, x, y):
-        if changedvalue == None:
-            changedvalue = int(0)
-        if changedvalue == valueofxy:
-            return False
-        else:
+    def changeofthevalue(self, changedvalue, arrayname, x, y):
             arrayname[x, y] = changedvalue
             return True
     
+    #The internal checks - one by one
     def switch(self):
         mtrxxy = self.matrixxy(x, y, xminus1, xplus1, xplus2, yminus1, yplus1, yplus2, valueofxy, arrcur.arr)
         cnt0, cnt1 = self.countthemall(mtrxxy, valueofxy)
         rlsgame = self.rulesofthegame(valueofxy, cnt0, cnt1)
-        chngvle = self.changeofthevalue(rlsgame, valueofxy, arrnext.arr, x, y)
+        print(rlsgame)
+        chngvle = self.changeofthevalue(rlsgame, arrnext.arr, x, y)
         #print("--------")
-        #print(valueofxy, mtrxxy, cnt0, cnt1, rlsgame, chngvle, x, y)     
-
-checks = Checks()
-noiterations = 0
-valueofgenxy = newarray[x1, y1]
-generationncurrent = generationnnn
-
+        #print(valueofxy, mtrxxy, cnt0, cnt1, rlsgame, chngvle, x, y)    
+        
+        
 class Internalth:
     
     def __init__(self):
         self.arr = []
     
     def copyofarray(self, arrayname):
+        self.arr = []
         self.arr = np.copy(arrayname).astype(int)
     
     def countofgenn(self, currvalue):
         if currvalue == 1 :
-            self.arr = np.append(self.arr, 1).astype(int)
-            #print(self.arr)
+            self.arr = np.append(self.arr, currvalue).astype(int)
+            print(self.arr)
 
-arrcur = Internalth()
-arrnext = Internalth()
+checks = Checks()
+noiterations = 0
+valueofgenxy = newarray[x1, y1]
+generationncurrent = generationnnn
+
+arrcur = Internalth()    #Making one array that will be current
+arrnext = Internalth()   #Making one array that will be next generation
 arrpr = Internalth()
-geniter = Internalth()
+geniter = Internalth()   #Making one array that will count the value of x1, y1 till genN
+
 
 while generationncurrent > noiterations:
     
-    if generationncurrent == generationnnn:
+    if generationncurrent < generationnnn:
+        arrcur.copyofarray(arrpr.arr)       
+    else:
         arrcur.copyofarray(newarray)
         arrnext.copyofarray(newarray)
-    else:
-        arrcur.copyofarray(arrpr.arr)
-    
+        
     for index, valueofxy in np.ndenumerate(arrcur.arr):
         x, y = index
         int(valueofxy)
-        xminus1 = x - 1
+        xminus1 = x - 1   #Values that are used for the numpy array views
         xplus1 = x + 1
         xplus2 = x + 2
         yminus1 = y - 1
         yplus1 = y + 1 
         yplus2 = y + 2   
-        checks.switch()    
+        checks.switch()  #All of the internal checks  
         if (x, y) == (x1, y1):
             geniter.countofgenn(valueofxy)
-                   
-    arrpr.copyofarray(arrnext.arr)
-        
+            
+    arrpr.copyofarray(arrnext.arr)  
     generationncurrent -= 1
     #print(generationncurrent)
-print(arrpr.arr, arrcur.arr, len(geniter.arr))
+print(arrcur.arr, len(geniter.arr), " - x1, y1 as green during the ", generationnnn, "iterations")
